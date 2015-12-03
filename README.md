@@ -3,8 +3,8 @@
 ## Installation Guide
 
 #### Prerequisite
-1. Install rocketmq-client4cpp
-2. Install PHP-CPP
+1. Install [rocketmq-client4cpp](https://github.com/lizhanhui/rocketmq-client4cpp)
+2. Install [PHP-CPP](https://github.com/CopernicaMarketingSoftware/PHP-CPP)
 ### Install rocketmq-client4php 
 1. clone this repository to a directory, say rocketmq-client4php
 2. cd rocketmq-client4php
