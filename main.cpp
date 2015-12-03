@@ -160,8 +160,9 @@ ConsumeConcurrentlyStatus PhpMessageListener::consumeMessage(std::list<MessageEx
     }
 
     Php::Value param = Php::Object("PhpMessage", new PhpMessage(messageExt));
+    Php::Value value;
     try {
-        Php::Value value = _callback(param);
+        value = _callback(param);
     } catch (...) {
         std::cout << "Yuck!" << std::endl;
         delete(messageExt);
