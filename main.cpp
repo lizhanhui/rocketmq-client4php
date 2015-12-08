@@ -164,16 +164,17 @@ ConsumeConcurrentlyStatus PhpMessageListener::consumeMessage(std::list<MessageEx
     try {
         value = _callback(param);
     } catch (...) {
-        std::cout << "Yuck!" << std::endl;
-        delete(messageExt);
+        std::cout << "Yuck! Bussiness code is buggy!" << std::endl;
     }
-
+/*
     if (value.numericValue() > 0) {
         std::cout << "Message Consumption Failed! Retry Later." << std::endl;
+        context->ackIndex = 0;
         return RECONSUME_LATER;
     }
 
+*/
     std::cout << "Message Consumed OK" << std::endl;
-
+    context->ackIndex = 1;
     return CONSUME_SUCCESS;
 }
