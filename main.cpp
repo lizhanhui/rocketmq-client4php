@@ -62,6 +62,8 @@ class PhpPushConsumer : public Php::Base {
 public:
     PhpPushConsumer() {
         consumer = new DefaultMQPushConsumer();
+        consumer->setConsumeThreadMax(1);
+        consumer->setConsumeThreadMin(1);
     }
 
     virtual ~PhpPushConsumer() {
@@ -152,6 +154,11 @@ PHPCPP_EXPORT void *get_module()
 
 ConsumeConcurrentlyStatus PhpMessageListener::consumeMessage(std::list<MessageExt *> &msgs,
                                                              ConsumeConcurrentlyContext &context) {
+    std::cout << "batch size: " << msgs.size() << std::endl;
+    if(msgs.empty()) {
+       throw Php::Exception("batch consuming message list is empty");
+    }
+
     MessageExt* messageExt = msgs.front();
     std::cout << "Begin to consume message. msgId: " << messageExt->getMsgId() << std::endl;
     std::cout << "Test if callable: " << (_callback.isCallable() ? " true" : "false") << std::endl;
@@ -166,14 +173,13 @@ ConsumeConcurrentlyStatus PhpMessageListener::consumeMessage(std::list<MessageEx
     } catch (...) {
         std::cout << "Yuck! Bussiness code is buggy!" << std::endl;
     }
-/*
-    if (value.numericValue() > 0) {
+
+    if (!value.isNull() && value.isNumeric() && value.numericValue() > 0) {
         std::cout << "Message Consumption Failed! Retry Later." << std::endl;
         context.ackIndex = 0;
         return RECONSUME_LATER;
     }
 
-*/
     std::cout << "Message Consumed OK" << std::endl;
     context.ackIndex = 1;
     return CONSUME_SUCCESS;
